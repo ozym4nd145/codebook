@@ -69,3 +69,16 @@ void convexHull(Point points[], int n, vector<Point>&chull_pts){
 		S.pop();
 	}
 }
+
+long long int Area(vector<Point> chull_pts){
+	//returns 2*Area of the convex hull
+	int sizehull = chull_pts.size(), j=chull_pts.size()-1;
+    long long int area=0;
+    for(int i=0; i<sizehull; i++)
+    {
+        area+=((hull[j].x*hull[i].y)-(hull[i].x*hull[j].y));
+        j=i;
+    }
+    area=abs(area);
+    return area;
+}
