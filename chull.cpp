@@ -76,7 +76,7 @@ long long int Area(vector<Point> chull_pts){
     long long int area=0;
     for(int i=0; i<sizehull; i++)
     {
-        area+=((hull[j].x*hull[i].y)-(hull[i].x*hull[j].y));
+        area+=((chull_pts[j].x*chull_pts[i].y)-(chull_pts[i].x*chull_pts[j].y));
         j=i;
     }
     area=abs(area);
