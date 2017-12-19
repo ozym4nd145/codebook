@@ -1,98 +1,79 @@
-// This is set up for range minimum queries, but can be easily adapted for computing other quantities.
-// To enable lazy propagation and range updates, uncomment the following line.
-// #define LAZY
-struct Segtree {
-	int n;
-	vector<int> data;
-#ifdef LAZY
-#define NOLAZY 2e9
-#define GET(node) (lazy[node] == NOLAZY ? data[node] : lazy[node])
-	vector<int> lazy;
-#else
-#define GET(node) data[node]
-#endif
-	void build_rec(int node, int* begin, int* end) {
-		if (end == begin+1) {
-			if (data.size() <= node) data.resize(node+1);
-			data[node] = *begin;
-		} else {
-			int* mid = begin + (end-begin+1)/2;
-			build_rec(2*node+1, begin, mid);
-			build_rec(2*node+2, mid, end);
-			data[node] = min(data[2*node+1], data[2*node+2]);
-		}
-	}
-#ifndef LAZY
-	void update_rec(int node, int begin, int end, int pos, int val) {
-		if (end == begin+1) {
-			data[node] = val;
-		} else {
-			int mid = begin + (end-begin+1)/2;
-			if (pos < mid) {
-				update_rec(2*node+1, begin, mid, pos, val);
-			} else {
-				update_rec(2*node+2, mid, end, pos, val);
-			}
-			data[node] = min(data[2*node+1], data[2*node+2]);
-		}
-	}
-#else
-	void update_range_rec(int node, int tbegin, int tend, int abegin, int aend, int val) {
-		if (tbegin >= abegin && tend <= aend) {
-			lazy[node] = val;
-		} else {
-			int mid = tbegin + (tend - tbegin + 1)/2;
-			if (lazy[node] != NOLAZY) {
-				lazy[2*node+1] = lazy[2*node+2] = lazy[node]; lazy[node] = NOLAZY;
-			}
-			if (mid > abegin && tbegin < aend)
-				update_range_rec(2*node+1, tbegin, mid, abegin, aend, val);
-			if (tend > abegin && mid < aend)
-				update_range_rec(2*node+2, mid, tend, abegin, aend, val);
-			data[node] = min(GET(2*node+1), GET(2*node+2));
-		}
-	}
-#endif
-	int query_rec(int node, int tbegin, int tend, int abegin, int aend) {
-		if (tbegin >= abegin && tend <= aend) {
-			return GET(node);
-		} else {
-#ifdef LAZY
-			if (lazy[node] != NOLAZY) {
-				data[node] = lazy[2*node+1] = lazy[2*node+2] = lazy[node]; lazy[node] = NOLAZY;
-			}
-#endif
-			int mid = tbegin + (tend - tbegin + 1)/2;
-			int res = INT_MAX;
-			if (mid > abegin && tbegin < aend) 
-				res = min(res, query_rec(2*node+1, tbegin, mid, abegin, aend));
-			if (tend > abegin && mid < aend)
-				res = min(res, query_rec(2*node+2, mid, tend, abegin, aend));
-			return res;
-		}
-	}
+int arr[100001], segtree[4*100001], lazy[4*100001];
 
-	// Create a segtree which stores the range [begin, end) in its bottommost level.
-	Segtree(int* begin, int* end): n(end - begin) {
-		build_rec(0, begin, end);
-#ifdef LAZY
-		lazy.assign(data.size(), NOLAZY);
-#endif
+void build(int node, int start, int end)
+{
+	if(start == end)
+	{
+		segtree[node] = arr[start];
+		lazy[node] = 0;
 	}
+	else
+	{
+		int mid = (start+end)/2;
+		build(2*node, start, mid);
+		build(2*node+1, mid+1, end);
+		segtree[node] = min(segtree[2*node], segtree[2*node+1]);
+		lazy[node] = 0;
+	}
+}
 
-#ifndef LAZY
-	// Call this to update a value (indices are 0-based). If lazy propagation is enabled, use update_range(pos, pos+1, val) instaed.
-	void update(int pos, int val) {
-		update_rec(0, 0, n, pos, val);
+void update(int node, int start, int end, int X)
+{
+	if(start > end)
+		return;
+	if(lazy[node])
+	{
+		segtree[node] -= lazy[node];
+		if(start != end)
+		{
+			lazy[2*node] += lazy[node];
+			lazy[2*node+1] += lazy[node];
+		}
+		lazy[node] = 0;
 	}
-#else 
-	// Call this to update range [begin, end), if lazy propagation is enabled. Indices are 0-based.
-	void update_range(int begin, int end, int val) {
-		update_range_rec(0, 0, n, begin, end, val);
+	if(segtree[node] > X)
+	{
+		segtree[node] -= 1;
+		if(start != end)
+		{
+			lazy[2*node] += 1;
+			lazy[2*node+1] += 1;
+		}
 	}
-#endif
-	// Returns minimum in range [begin, end). Indices are 0-based.
-	int query(int begin, int end) {
-		return query_rec(0, 0, n, begin, end);
+	else
+	{
+		if(start == end)
+			return;
+		int mid = (start+end)/2;
+		update(2*node, start, mid, X);
+		update(2*node+1, mid+1, end, X);
+		segtree[node] = min(segtree[2*node], segtree[2*node+1]);
 	}
-};
+}
+
+
+int query(int node, int start, int end, int idx)
+{
+	if(idx < start || idx > end || start > end)
+		return 0;
+	if(lazy[node])
+	{
+		segtree[node] -= lazy[node];
+		if(start != end)
+		{
+			lazy[2*node] += lazy[node];
+			lazy[2*node+1] += lazy[node];
+		}
+		lazy[node] = 0;
+	}
+	if(start == end)
+		return segtree[node];
+	else
+	{
+		int mid = (start+end)/2;
+		if(start<=idx && idx<=mid)
+			return query(2*node, start, mid, idx);
+		else
+			return query(2*node+1, mid+1, end, idx);
+	}
+}

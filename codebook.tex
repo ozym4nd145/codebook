@@ -11,7 +11,7 @@
 \lstset{
 	tabsize=4,
     % basicstyle=\ttfamily\scriptsize,
-    basicstyle=\fontsize{9}{11}\selectfont\ttfamily,
+    basicstyle=\fontsize{10}{11}\selectfont\ttfamily,
     %upquote=true,
     aboveskip={1.5\baselineskip},
     columns=fixed,
@@ -191,11 +191,6 @@ there is no generalization to higher dimensions)
 % Otherwise, it will be available later as Find(u).ancestor, immediately after v
 % is colored black.
 
-\section{Data Structures}
-
-\subsection{Suffix arrays} % Stanford
-\lstinputlisting[language=c++]{suffix-array.cpp}
-
 % \subsection{Binary Indexed Tree (BIT) / Fenwick Tree} % Brian Bi
 % \lstinputlisting[language=c++]{BIT.cpp}
 
@@ -208,6 +203,14 @@ there is no generalization to higher dimensions)
 % \subsection{Size-Balanced Tree}
 % % Tom Yubing Dong (tomtung) (modified by Brian Bi)
 % \lstinputlisting[language=c++]{SBT.cpp}
+
+\section{Data Structures}
+\subsection{LCA} %Suyash
+\lstinputlisting[language=c++]{lca.cpp}
+
+\subsection{Segment Tree (Lazy)} %Suyash
+\lstinputlisting[language=c++]{segtree.cpp}
+
 
 \section{Number Theory Reference}
 \subsection{Polynomial Coefficients (Text)} % Brian Bi
@@ -224,10 +227,12 @@ where,
 m&=m_{k}p^{k}+m_{k-1}p^{k-1}+\cdots +m_{1}p+m_{0}\\
 n&=n_{k}p^{k}+n_{k-1}p^{k-1}+\cdots +n_{1}p+n_{0}
 \end{align*}
-\subsection{Wilson Theorem}
-A natural number $p > 1$ is a prime number if and only if\\
+\subsection{Facts}
+\begin{itemize}
+\item \textbf{Wilsons Theorem}: A natural number $p > 1$ is a prime number if and only if
 $ (p-1)! = -1 \pmod{p} $
-
+\item Sum of values of totient functions of all divisors of n is equal to n.
+\end{itemize}
 \subsection{M\"obius Function (Text)} % Brian Bi
 $\mu(n) = \begin{cases}
 0 & \text{$n$ not squarefree} \\
@@ -261,10 +266,22 @@ itself) and $2n^2-n$ groups of 2 (all remaining cells), thus yielding
 $X^{2n^2-n+2n}=X^{2n^2+n}$ unaffected colorings.  So, the answer is
 $(X^{4n^2}+3X^{2n^2}+2X^{n^2}+2X^{2n^2+n})/8$.
 
-\section{Miscellaneous}
+\section{String Algorithms}
+
+\subsection{Suffix arrays} % Stanford
+\lstinputlisting[language=c++]{suffix-array.cpp}
 
 \subsection{Knuth--Morris--Pratt (KMP)} % Stanford
 \lstinputlisting[language=c++]{KMP.cpp}
+
+\subsection{Z Algorithm} % Stanford
+\lstinputlisting[language=c++]{Z.cpp}
+
+\subsection{Longest palindromic substring (Manacher\'s)} % Brian Bi
+\lstinputlisting[language=c++]{manacher.cpp}
+
+
+\section{Miscellaneous}
 
 \subsection{2-SAT} % Brian Bi
 \lstinputlisting[language=c++]{2sat.cpp}
@@ -300,8 +317,8 @@ Suppose there is a composite game (more than one sub-game) made up of N sub-game
 % // Finally, evaluate O as a postfix expression.
 % \end{lstlisting}
 
-% % \subsection{Convex hull trick} % Brian Bi
-% % \lstinputlisting[language=c++]{chtrick.cpp}
+\subsection{Convex hull trick} % Brian Bi
+\lstinputlisting[language=c++]{chtrick.cpp}
 
 % \subsection{Binary search} % Brian Bi
 % \lstinputlisting[language=c++]{bsearch.c}
@@ -312,8 +329,9 @@ Suppose there is a composite game (more than one sub-game) made up of N sub-game
 % \subsection{All nearest smaller values} % Brian Bi
 % \lstinputlisting[language=c++]{ansv.cpp}
 
-\subsection{Longest palindromic substring} % Brian Bi
-\lstinputlisting[language=c++]{manacher.cpp}
+
+\subsection{Counting Inversion} %Suyash
+\lstinputlisting[language=c++]{inversion.cpp}
 
 \subsection{Template} % Suyash
 \lstinputlisting[language=c++]{template.cpp}
