@@ -22,7 +22,7 @@ void convex_hull(vector<pair<int, int> > pts, vector<pair<int, int> >& hull) {
 	}
 }
 
-long long int Area(vector<pair<int, int>> hull){
+long long int area_hull(const vector<pair<int, int>> &hull){
 	//returns 2*Area of the convex hull
 	int sizehull = hull.size(), j=hull.size()-1;
     long long int area=0;
