@@ -14,8 +14,8 @@ typedef pair<LL,LL> PLL;
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-	// freopen("in","r",stdin);
-    return 0;
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+  // freopen("in","r",stdin);
+  return 0;
 }
